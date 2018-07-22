@@ -3,10 +3,20 @@ const fs=require('fs');
 
 
 
-module.exports.add=(a,b) =>{
+var add2=(a,b) =>{
     console.log('Adding '+a+','+b);
     return a+b;
 }
+
+var getAll=() =>{
+	console.log('Getting the all documents');
+}
+
+module.exports={
+	add: add2,
+	getAll: getAll
+
+};
 
 //var user=os.userInfo();
 
