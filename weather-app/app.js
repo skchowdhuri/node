@@ -1,5 +1,8 @@
-var request=require('request');
+const request=require('request');
 const yargs=require('yargs');
+
+const geocode=require('./geocode/geocode');
+const weather=require('./weather/weather');
 
 const argv=yargs.options({
     a: {
@@ -10,19 +13,23 @@ const argv=yargs.options({
     }
 })
 .help()
-.argv
+.argv;
 
-console.log(argv);
-
-
-var encodedAddress=encodeURIComponent(argv.a);
-
-request({
-    url: `https://maps.googleapis.com/maps/api/geocode/json?address=${encodedAddress}`,
-    json: true
-},
-(error, Response, body)=>{
-    console.log(`Address: ${JSON.stringify(body.results[0].formatted_address, undefined, 2)}`);
-    console.log(`Latitude: ${JSON.stringify(body.results[0].geometry.location.lat)}`);
-    console.log(`Longitude: ${JSON.stringify(body.results[0].geometry.location.lng)}`);
+geocode.geoViewer(argv.a,(errorView, results)=>{
+    if(errorView){
+        console.log(errorView);
+    }
+    else if(results){
+        console.log(`Address: ${results.address}`);
+        weather.weatherView(results.latitude, results.longitude, (errorViewWeather, weatherResults)=>{
+           if(errorViewWeather){
+               console.log(errorViewWeather);
+           }
+           else if(weatherResults){
+               console.log(`Weather is ${weatherResults.temperature} feel like ${weatherResults.feel}`)
+           }
+       })
+    }
 })
+
+

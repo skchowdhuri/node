@@ -16,9 +16,9 @@ var geoViewer=(address, callback)=>{
         }
         else if(body.status==='OK'){
             callback(undefined,{
-               Address: body.results[0].formatted_address,
-               Latitude: body.results[0].geometry.location.lat,
-                Longitude: body.results[0].geometry.location.lng
+               address: body.results[0].formatted_address,
+               latitude: body.results[0].geometry.location.lat,
+                longitude: body.results[0].geometry.location.lng
             });
         }
         else{
