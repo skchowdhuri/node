@@ -21,10 +21,16 @@ var geocodeURL=`https://maps.googleapis.com/maps/api/geocode/json?address=${enco
 
 axios.get(geocodeURL).then((response)=>{
     if(response.data.status==='ZERO_RESULTS'){
-       //console.log('Haha');
         throw new Error('There is an error');
     }
-    console.log(response.data);
+    var lat=response.data.results[0].geometry.location.lat;
+    var lng=response.data.results[0].geometry.location.lng;
+    var weatherURL=`https://api.darksky.net/forecast/cd50cdfe69d7c514cb76ccec1545989c/${lat},${lng}`;
+    console.log(response.data.results[0].formatted_address);
+    return axios.get(weatherURL);
+}).then((response)=>{
+    var temperature=response.data.currently.temperature;
+    console.log(temperature);
 }).catch((e)=>{
     if(e.code==='ENOTFOUND'){
         console.log('There is a problem at the time of fetching problem');
